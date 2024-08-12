@@ -4,6 +4,7 @@ import * as z from "zod";
 import { db } from "@/lib/db";
 import { RegisterSchema } from "@/schema/RegisterSchema";
 import bcrypt from "bcryptjs";
+import { getUserByEmail } from "@/utils/user";
 
 export const register = async (data: z.infer<typeof RegisterSchema>) => {
   const validateFields = RegisterSchema.safeParse(data);
@@ -15,21 +16,7 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
   const { name, email, password } = validateFields.data;
 
   try {
-    const existingUserByName = await db.user.findUnique({
-      where: {
-        name,
-      },
-    });
-
-    if (existingUserByName) {
-      return { error: "User already exist with this name" };
-    }
-
-    const existingUserByEmail = await db.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    const existingUserByEmail = await getUserByEmail(email);
 
     if (existingUserByEmail) {
       return { error: "User already exist with this email" };
@@ -45,7 +32,7 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
       },
     });
 
-    console.log("NEW USER : ", newUser);
+    console.log("new user : ", newUser);
 
     return { success: "User Created Successfully" };
   } catch (error) {

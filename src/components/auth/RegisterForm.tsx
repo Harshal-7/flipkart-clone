@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { RegisterSchema } from "@/schema/RegisterSchema";
+import { register } from "@/app/actions/register";
 
 const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
@@ -31,25 +32,23 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = () => {
-    // setLoading(true);
-    // register(data).then((res) => {
-    //   if (res.error) {
-    //     toast({
-    //       title: "User Registeration Failed",
-    //       description: res.error,
-    //       variant: "destructive",
-    //     });
-    //   } else {
-    //     toast({
-    //       title: res.success,
-    //       description: "Login to access dashboard",
-    //     });
-    //     setLoading(false);
-    //     router.replace(`/login`);
-    //   }
-    // });
-    // setLoading(false);
+  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    register(values).then((res) => {
+      if (res.error) {
+        toast({
+          title: "User Registeration Failed",
+          description: res.error,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: res.success,
+          description: "Login to access dashboard",
+        });
+        setLoading(false);
+        router.replace(`/login`);
+      }
+    });
   };
 
   return (
@@ -142,7 +141,7 @@ const RegisterForm = () => {
 
         <button
           onClick={() => router.push("/login")}
-          className="w-full bg-white text-blue-500 border shadow-md p-3 font-semibold hover:shadow-lg mt-4"
+          className="w-full text-sm bg-white text-blue-500 border shadow-md p-3 font-semibold hover:shadow-lg mt-4"
         >
           Existing User? Log in
         </button>

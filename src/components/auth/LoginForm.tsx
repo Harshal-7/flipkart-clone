@@ -16,11 +16,16 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { LoginSchema } from "@/schema/LoginSchema";
+import { login } from "@/app/actions/login";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { setAuthState } from "@/lib/store/features/authSlice";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+
+  const dispatch = useAppDispatch();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -30,25 +35,31 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = () => {
-    // setLoading(true);
-    // register(data).then((res) => {
-    //   if (res.error) {
-    //     toast({
-    //       title: "User Registeration Failed",
-    //       description: res.error,
-    //       variant: "destructive",
-    //     });
-    //   } else {
-    //     toast({
-    //       title: res.success,
-    //       description: "Login to access dashboard",
-    //     });
-    //     setLoading(false);
-    //     router.replace(`/login`);
-    //   }
-    // });
-    // setLoading(false);
+  // login function logic
+  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+    login(data)
+      .then((res) => {
+        if (res?.error) {
+          toast({
+            title: res?.error,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "User Logged In Successfully",
+          });
+        }
+      })
+      .catch((err: any) => {
+        toast({
+          title: err.message,
+        });
+        setLoading(false);
+      });
+
+    // set isAuthenticated-state in redux store to true and redirecting to home-page
+    dispatch(setAuthState(true));
+    router.push("/");
   };
 
   return (
@@ -124,9 +135,9 @@ const LoginForm = () => {
         </form>
         <button
           onClick={() => router.push("/register")}
-          className="w-full bg-white text-blue-500 border shadow-md p-3 font-semibold hover:shadow-lg mt-4"
+          className="w-full text-sm bg-white text-blue-500 border shadow-md p-3 font-semibold hover:shadow-lg mt-4"
         >
-          Existing User? Log in
+          New to Flipkart? Create an account
         </button>
       </Form>
     </div>
