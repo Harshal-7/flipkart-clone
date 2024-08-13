@@ -39,16 +39,16 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { setCartItems } from "@/lib/store/features/cartSlice";
 
 const ProductDetails = ({ params }: { params: { id: any } }) => {
   const [product, setProduct] = useState<any>();
-  const [quantity, setQuantity] = useState(1);
-  const [updateCart, setUpdateCart] = useState(false);
-  const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
-  const [isInCart, setIsInCart] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenSpecs, setIsOpenSpec] = useState(false);
   const [imgId, setImgId] = useState(0);
+
+  //redux-state
+  const dispatch = useAppDispatch();
 
   const discount = (
     ((product?.mrp - product?.price) / product?.mrp) *
@@ -89,107 +89,8 @@ const ProductDetails = ({ params }: { params: { id: any } }) => {
 
   // Add Item To Cart
   const handleAddToCart = async () => {
-    try {
-      const res = await axios.post(
-        "https://ali-express-clone.onrender.com/api/cart/add",
-        {
-          productId: `${product.itemId}`,
-          title: `${product.title}`,
-          price: (product.sku.def.promotionPrice * 83).toFixed(2),
-          image: `${product.images[0]}`,
-          quantity: quantity,
-          size: "m",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: document.cookie,
-          },
-        }
-      );
-      toast({
-        title: "Item added to cart",
-        className: "text-red-600 bg-white hover:bg-gray-100 font-bold",
-      });
-    } catch (error) {
-      console.log("ERROR adding to cart : ", error);
-    }
-    setUpdateCart(true);
-  };
-
-  // Update item quantity inside cart
-  const handleUpdateCart = async () => {
-    try {
-      const res = await axios.patch(
-        `https://ali-express-clone.onrender.com/api/cart/${product.itemId}`,
-        {
-          productId: `${product.itemId}`,
-          quantity: quantity,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: document.cookie,
-          },
-        }
-      );
-
-      toast({
-        title: "Cart updated successfully",
-        className: "text-red-600 bg-white hover:bg-gray-100 font-bold",
-      });
-    } catch (error) {
-      console.log("ERROR updating cart : ", error);
-    }
-  };
-
-  const handleRemoveFromWishlist = async () => {
-    try {
-      const res = await axios.delete(
-        `https://ali-express-clone.onrender.com/api/wishlist/removeone/${product.itemId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: document.cookie,
-          },
-        }
-      );
-      console.log("remove wishlist : ", res);
-    } catch (error) {
-      console.log("ERROR removing from wishlist : ", error);
-    }
-  };
-
-  const handleWishList = async () => {
-    if (isAddedToWishlist) {
-      handleRemoveFromWishlist();
-      return;
-    }
-    try {
-      await axios.post(
-        "https://ali-express-clone.onrender.com/api/wishlist/add",
-        {
-          productId: `${product.itemId}`,
-          title: `${product.title}`,
-          price: (product.sku.def.promotionPrice * 83).toFixed(2),
-          image: `${product.images[0]}`,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: document.cookie,
-          },
-        }
-      );
-    } catch (error) {
-      console.log("ERROR adding to wishlist : ", error);
-    }
-    setUpdateCart(true);
-    setIsAddedToWishlist(true);
-  };
-
-  const handleClick = (e: any) => {
-    e.currentTarget.disabled = true;
+    console.log("product : ", product);
+    dispatch(setCartItems(product));
   };
 
   if (!product) {
@@ -228,18 +129,22 @@ const ProductDetails = ({ params }: { params: { id: any } }) => {
           </CarouselContent>
         </Carousel>
 
+        {/* PRODUCT IMG, ADD TO CART & BUY NOW  */}
         <div className="w-full h-fit flex flex-col gap-10 justify-center items-start px-8 overflow-hidden mt-4">
           <img
-            className="w-fit h-fit max-w-[340px] max-h-[420px] hover:scale-105 transition-transform duration-500"
+            className="w-fit h-fit self-center max-w-[340px] max-h-[420px] hover:scale-105 transition-transform duration-500"
             src={`${product.images[imgId]}`}
             alt="product-image"
           />
           <div className="flex gap-4 w-full">
-            <button className="bg-[#ff9f00] text-white font-bold w-full flex items-center justify-center px-4 py-4 gap-2 hover:bg-[#ff9f00]/90">
+            <button
+              onClick={handleAddToCart}
+              className="font-bold w-full flex items-center justify-center px-3 py-4 gap-2 bg-[#ff9f00] text-white hover:bg-[#ff9f00]/90"
+            >
               <ShoppingCart fill="white" className="w-6 h-6" />
               <p> Add to cart</p>
             </button>
-            <button className="bg-[#fb641b] text-white font-bold w-full flex items-center justify-center px-4 py-4 gap-2 hover:bg-[#fb641b]/90 ">
+            <button className="font-bold w-full flex items-center justify-center px-3 py-4 gap-2 bg-[#fb641b] text-white hover:bg-[#fb641b]/90 ">
               <Zap fill="white" className="w-6 h-6" />
               <p>Buy Now</p>
             </button>

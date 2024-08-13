@@ -53,7 +53,7 @@ const Header = () => {
   // }, []);
 
   useEffect(() => {
-    console.log("Categories : ", categories);
+    // console.log("Categories : ", categories);
   }, [categories]);
 
   const handleSearchButton = () => {
