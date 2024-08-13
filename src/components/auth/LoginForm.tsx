@@ -103,7 +103,7 @@ const LoginForm = () => {
 
           <div className="flex flex-col gap-4 mt-10">
             <div className="text-xs text-muted-foreground ">
-              By continuing, you agree to Flipkart's{" "}
+              By continuing, you agree to Flipkart&apos;s{" "}
               <a
                 className="text-blue-500"
                 target="_blank"
