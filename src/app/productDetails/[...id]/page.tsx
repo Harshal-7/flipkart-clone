@@ -96,8 +96,9 @@ const ProductDetails = ({ params }: { params: { id: any } }) => {
 
   // Add Item To Cart
   const handleAddToCart = async () => {
-    console.log("product : ", product);
+    console.log("added to cart : ", product);
     dispatch(setCartItems(product));
+    router.push("/cart");
   };
 
   if (!product) {
@@ -123,18 +124,16 @@ const ProductDetails = ({ params }: { params: { id: any } }) => {
           <CarouselContent>
             {product?.images.map((item: any, index: number) => (
               <CarouselItem key={index}>
-                <Card className="border-none flex shadow-none rounded-xl">
-                  <CardContent
-                    onClick={() => setImgId(index)}
-                    className="flex items-center justify-center overflow-hidden w-20 border p-2"
-                  >
-                    <img
-                      src={item}
-                      alt="img"
-                      className="w-fit h-fit max-h-20 object-cover object-center rounded-xl"
-                    />
-                  </CardContent>
-                </Card>
+                <div
+                  onClick={() => setImgId(index)}
+                  className="flex w-20 h-20 border"
+                >
+                  <img
+                    src={item}
+                    alt="img"
+                    className="w-full h-full object-contain object-center"
+                  />
+                </div>
               </CarouselItem>
             ))}
           </CarouselContent>

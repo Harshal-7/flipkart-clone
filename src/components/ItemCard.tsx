@@ -18,7 +18,7 @@ const ItemCard = ({ product }: { product: any }) => {
           <img
             src={product.images[0]}
             alt="img"
-            className="h-full md:mx-auto object-cover p-6 hover:scale-105 transition-all duration-500"
+            className="h-full md:mx-auto object-contain p-6 hover:scale-105 transition-all duration-500"
           />
         </Link>
       </div>

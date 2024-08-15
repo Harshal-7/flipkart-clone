@@ -1,6 +1,5 @@
 "use client";
 
-import { CategoryList } from "@/constants";
 import React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -15,7 +14,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useRouter } from "next/navigation";
 
-const CategoryTree = () => {
+const CategoryTree = ({ CategoryList }: any) => {
   const router = useRouter();
 
   const handleSubCategory = (id: any) => {
@@ -54,7 +53,7 @@ const CategoryTree = () => {
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        {Object.values(CategoryList).map((category) => (
+        {Object.values(CategoryList).map((category: any) => (
           <NavigationMenuItem key={category.id}>
             <NavigationMenuTrigger className="">
               {category.title}

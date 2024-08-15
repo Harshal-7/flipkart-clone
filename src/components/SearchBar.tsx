@@ -19,7 +19,6 @@ const SearchBar = () => {
     <>
       <Input
         value={inputItem}
-        onKeyUp={handleSearchButton}
         onChange={(e) => setInputItem(e.target.value)}
         className="w-full md:px-3 md:py-2 bg-slate-100 border-none "
         placeholder="Search for Products, Brands and More"

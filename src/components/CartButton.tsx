@@ -14,7 +14,7 @@ const CartButton = () => {
 
   useEffect(() => {
     try {
-      let cartQuantity = localStorage.getItem("cartQuntity");
+      let cartQuantity = window.localStorage.getItem("cartQuntity");
 
       setQuantity(JSON.parse(cartQuantity as string));
       console.log("cartQuantity", cartQuantity);

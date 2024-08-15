@@ -18,7 +18,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import SearchBar from "./SearchBar";
 import axios from "axios";
-import { CategoryList } from "@/constants";
 import CategoryTree from "./CategoryTree";
 
 const notoSans = Noto_Sans({
@@ -93,8 +92,8 @@ const Header = () => {
           <CartButton />
         </div>
       </div>
-      <div className="w-full flex justify-center items-center gap-4 xl:gap-8 p-4 bg-white">
-        <CategoryTree />
+      <div className="w-full flex justify-center items-center gap-4 xl:gap-8 p-4 bg-white shadow-sm">
+        <CategoryTree CategoryList={categories} />
       </div>
     </nav>
   );

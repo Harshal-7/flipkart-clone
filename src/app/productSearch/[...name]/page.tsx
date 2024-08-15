@@ -79,7 +79,7 @@ const ProductSearch = ({ params }: { params: { name: any } }) => {
         <div className="text-xl font-bold">
           Showing {page} - {data?.productsInPage} of{" "}
           {data?.totalPages * data?.productsInPage} result for{" "}
-          {data?.breadCrumbs[1].title}
+          {data?.breadCrumbs[1]?.title}
         </div>
         <div className="flex items-center">
           <p className="font-semibold">Sort by</p>
