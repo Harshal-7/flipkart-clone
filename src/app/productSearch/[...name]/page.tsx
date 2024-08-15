@@ -2,39 +2,38 @@
 
 import React, { useEffect, useState } from "react";
 
-import { Separator } from "@/components/ui/separator";
 import axios from "axios";
-import ItemCard from "@/components/ItemCard";
 import Loader from "@/components/Loader";
-import { getProductsByCategoryId } from "@/utils/products";
-import ProductNotFount from "@/components/ProductNotFount";
+import ItemCard from "@/components/ItemCard";
+import { getProductsByCategoryName } from "@/utils/products";
 
-const ProductList = ({ params }: { params: { id: any } }) => {
+const sortBy = [
+  { relevance: "Relevance" },
+  { popularity: "Popularity" },
+  { price_asc: "Price - Low to High" },
+  { price_desc: "Price - High to Low" },
+  { recency_desc: "Newest First" },
+];
+
+const ProductSearch = ({ params }: { params: { name: any } }) => {
   const [products, setProducts] = useState<any>();
   const [data, setData] = useState<any>();
+
   const [activeButton, setActiveButton] = useState("Relevance");
   const [page, setPage] = useState(1);
 
-  const sortBy = [
-    { relevance: "Relevance" },
-    { popularity: "Popularity" },
-    { price_asc: "Price - Low to High" },
-    { price_desc: "Price - High to Low" },
-    { recency_desc: "Newest First" },
-  ];
-
   useEffect(() => {
-    const paramName = params.id.join("/");
-    // console.log("PARAM NAME : ", paramName);
+    const paramName = params.name.join("/");
+    console.log("PARAM NAME : ", paramName);
   }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
       const options = {
         method: "GET",
-        url: "https://real-time-flipkart-api.p.rapidapi.com/products-by-category",
+        url: "https://real-time-flipkart-api.p.rapidapi.com/product-search",
         params: {
-          category_id: `${params.id.join("/")}`,
+          q: `${params.name.join("/")}`,
           page: "1",
         },
         headers: {
@@ -46,7 +45,7 @@ const ProductList = ({ params }: { params: { id: any } }) => {
 
       try {
         const response = await axios.request(options);
-        console.log("response-data : ", response.data);
+        // console.log("response-data : ", response.data);
         setProducts(response.data.products);
         setData(response.data);
       } catch (error) {
@@ -56,27 +55,31 @@ const ProductList = ({ params }: { params: { id: any } }) => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    console.log("products : ", products);
+    console.log("data: ", data);
+  }, [products, data]);
+
   const handleSorting = async (sortByValue: any, label: any) => {
-    const response = await getProductsByCategoryId(
-      params.id.join("/"),
+    const response = await getProductsByCategoryName(
+      params.name.join("/"),
       sortByValue
     );
-    console.log("RESSSS : ", response);
     setProducts(response.products);
     setActiveButton(label);
   };
 
-  if (!products) {
-    return <Loader />;
+  if (!products || !data) {
+    <Loader />;
   }
 
   return (
     <div className="w-full max-w-screen-2xl mx-auto md:mt-5 px-6 py-4">
       <div className="hidden md:flex flex-col gap-2 text-sm p-4 bg-white">
         <div className="text-xl font-bold">
-          Showing {page} - {data.productsInPage} of{" "}
-          {data.totalPages * data.productsInPage} result for{" "}
-          {data.breadCrumbs[1].title}
+          Showing {page} - {data?.productsInPage} of{" "}
+          {data?.totalPages * data?.productsInPage} result for{" "}
+          {data?.breadCrumbs[1].title}
         </div>
         <div className="flex items-center">
           <p className="font-semibold">Sort by</p>
@@ -103,7 +106,7 @@ const ProductList = ({ params }: { params: { id: any } }) => {
       </div>
 
       <div className="w-full max-w-screen-2xl flex flex-wrap gap-y-10 gap-x-4 justify-center md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-6 mt-1 bg-white">
-        {products.map((product: any, index: number) => (
+        {products?.map((product: any, index: number) => (
           <div key={index}>
             <ItemCard product={product} />
           </div>
@@ -112,7 +115,7 @@ const ProductList = ({ params }: { params: { id: any } }) => {
 
       <div className="w-full flex justify-between mt-2 p-5 bg-white mb-10">
         <div className="text-start w-1/2">
-          page {page} of {data.totalPages}{" "}
+          page {page} of {data?.totalPages}{" "}
         </div>
         <div className=" flex gap-2 flex-grow">
           <p>1</p>
@@ -127,4 +130,4 @@ const ProductList = ({ params }: { params: { id: any } }) => {
   );
 };
 
-export default ProductList;
+export default ProductSearch;

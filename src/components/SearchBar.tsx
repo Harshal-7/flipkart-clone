@@ -9,13 +9,17 @@ const SearchBar = () => {
   const [inputItem, setInputItem] = useState("");
   const router = useRouter();
 
-  const handleSearchButton = () => {
-    console.log("Input : ", inputItem);
+  const handleSearchButton = (e: any) => {
+    const productName = inputItem;
+    setInputItem("");
+    router.push(`/productSearch/${productName}`);
   };
 
   return (
     <>
       <Input
+        value={inputItem}
+        onKeyUp={handleSearchButton}
         onChange={(e) => setInputItem(e.target.value)}
         className="w-full md:px-3 md:py-2 bg-slate-100 border-none "
         placeholder="Search for Products, Brands and More"

@@ -28,40 +28,50 @@ const notoSans = Noto_Sans({
 });
 
 const Header = () => {
-  const [inputItem, setInputItem] = useState("");
   const [categories, setCategories] = useState<any>();
 
   const router = useRouter();
 
+  // Fetching Categories-List from api and assigning to state
   useEffect(() => {
-    setCategories(CategoryList);
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://api.jsonbin.io/v3/b/66bdffaead19ca34f8967a9f"
+        );
+        setCategories(response.data?.record);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCategories();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "https://api.jsonbin.io/v3/b/66b92acbe41b4d34e41efbad"
-  //       );
-  //       console.log(response.data);
-  //       // setCategories(response.data.categories);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   fetchCategories();
-  // }, []);
-
-  useEffect(() => {
-    // console.log("Categories : ", categories);
-  }, [categories]);
-
-  const handleSearchButton = () => {
-    console.log("Input : ", inputItem);
-  };
-
   if (!categories) {
-    return <div></div>;
+    return (
+      <nav className="w-full bg-myBlue">
+        <div className="w-full md:max-w-6xl mx-auto flex justify-between gap-4 xl:gap-8 items-center p-4">
+          <div className="inline-flex">
+            <button
+              onClick={() => router.push("/")}
+              className={cn(
+                "text-xl lg:text-3xl text-white",
+                notoSans.className
+              )}
+            >
+              Flipkart
+            </button>
+          </div>
+          <div className="relative flex items-center flex-1">
+            <SearchBar />
+          </div>
+          <div className="flex items-center gap-2">
+            <ProfileButton />
+            <CartButton />
+          </div>
+        </div>
+      </nav>
+    );
   }
 
   return (

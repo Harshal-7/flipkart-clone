@@ -31,3 +31,4 @@ export const apiAuthPrefix: string = "/api/auth";
  * @type {string}
  */
 export const DEFAULT_REDIRECT: string = "/";
+
