@@ -8,7 +8,6 @@ This project is an Flipkart clone built using Next.js and Flipkart-API for data 
 - [Technologies Used](#technologies-used)
 - [Live Link](#live-links)
 - [Installation](#installation)
-- [API Documentation](#api-documentation)
 - [Screenshots](#screenshots-of-pages-from-project)
 - [Contributing](#contributing)
 
@@ -63,10 +62,6 @@ This project is an Flipkart clone built using Next.js and Flipkart-API for data 
    DATABASE_URL="YOUR_MONGO_URL"
    AUTH_SECRET="YOUR_SECRET_TOKEN"
    ```
-
-## API Documentation
-
-Full API documentation can be found [Here ](https://documenter.getpostman.com/view/32824294/2sA3rwNuRn).
 
 ## Screenshots of pages from project
 
