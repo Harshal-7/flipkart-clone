@@ -12,14 +12,6 @@ const initialState: CartState = {
   data: [],
 };
 
-// TODO: WINDOW>LOCALSTORAGE IN SLICES
-let myData;
-try {
-  myData = localStorage.getItem("cartItem") || [];
-} catch (error) {
-  console.log("CAN'T FIND ITEMS : ", error);
-}
-
 const cartItemSlice = createSlice({
   name: "cartItem",
   initialState,

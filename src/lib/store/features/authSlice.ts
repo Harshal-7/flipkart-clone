@@ -19,7 +19,6 @@ const authSlice = createSlice({
     },
   },
 });
-
 export const { setAuthState } = authSlice.actions;
 
 export const selectAuthState = (state: RootState) => state.auth.isAuthenticated;

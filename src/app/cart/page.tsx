@@ -78,9 +78,6 @@ const CartPage = () => {
               <CardTitle className="">
                 Shopping Cart ({items ? items.length : 0})
               </CardTitle>
-              <CardDescription className="inline-flex text-start hover:text-red-500">
-                <button className="">Remove All Products</button>
-              </CardDescription>
             </CardHeader>
             <hr className="my-6" />
           </React.Fragment>

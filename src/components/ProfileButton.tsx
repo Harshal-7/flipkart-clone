@@ -18,6 +18,11 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { RootState } from "@/lib/store/store";
 import { setAuthState } from "@/lib/store/features/authSlice";
 import { getSession, signout } from "@/utils/auth";
+import Link from "next/link";
+import {
+  removeMySession,
+  setMySession,
+} from "@/lib/store/features/sessionSlice";
 
 const ProfileButton = () => {
   // dispatch: used to set-auth-state in redux store so we can access the authentication state everywhere
@@ -27,20 +32,33 @@ const ProfileButton = () => {
     (state: RootState) => state.auth.isAuthenticated
   );
 
+  // get user session from redux-state
+  const session = useAppSelector((state) => state.session.mySession);
+  // set username from session.name
+  const [userName, setUserName] = useState<any>();
+
   useEffect(() => {
     // fetching the session value from server-side and setting isAuthenticated state
     const fetchSession = async () => {
       const session = await getSession();
       if (session?.user) {
         dispatch(setAuthState(true));
+        dispatch(setMySession(session));
+        setUserName(session.user.name);
       }
     };
     fetchSession();
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    console.log("session : ", session);
+    console.log("name : ", userName);
+  }, [session]);
+
   // signing out user and setting isAuthenticated state to false;
   const handleSignOut = async () => {
     dispatch(setAuthState(false));
+    dispatch(removeMySession());
     await signout();
   };
 
@@ -51,30 +69,33 @@ const ProfileButton = () => {
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger className="flex gap-1 lg:gap-2 items-center p-0 lg:p-2 rounded-lg bg-myBlue text-white font-semibold border-0 z-[99]">
-            <UserCircle2 className="w-5 md:w-6 h-5 md:h-6" />
-            <p className="hidden sm:inline-flex lg:text-base">Harshal</p>
+            <UserCircle2 className="w-6 h-6" />
+            <p className="hidden sm:inline-flex lg:text-base">
+              {userName ? userName : "User"}
+            </p>
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <div className="flex flex-col gap-2 p-4">
-              <div className="flex justify-center items-center text-lg gap-1 xl:gap-4">
+              <div className="flex flex-col sm:flex-row justify-center items-center text-lg gap-1 xl:gap-4">
                 {isAuthenticated ? (
                   <Button
                     onClick={handleSignOut}
-                    className="bg-blue-600 text-white xl:text-lg font-semibold hover:bg-blue-600/90 px-2 lg:px-4 xl:px-8"
+                    className="w-full flex gap-2 justify-start items-center bg-blue-600 text-white xl:text-lg font-semibold hover:bg-blue-600/90 px-2 lg:px-4 xl:px-8"
                   >
-                    Sign Out
+                    <LogOut className="w-4 h-4" />
+                    Logout
                   </Button>
                 ) : (
                   <>
                     <Button
                       onClick={() => router.push("/login")}
-                      className="bg-blue-600 text-white xl:text-lg font-semibold hover:bg-blue-600/90 px-2 lg:px-4 xl:px-6"
+                      className="w-full bg-blue-600 text-white xl:text-lg font-semibold hover:bg-blue-600/90 px-2 lg:px-4 xl:px-6"
                     >
                       Login
                     </Button>
                     <Button
                       onClick={() => router.push("/register")}
-                      className="text-blue-600 xl:text-lg font-semibold hover:bg-blue-600/10 px-2 lg:px-4 xl:px-6"
+                      className="w-full text-blue-600 xl:text-lg font-semibold hover:bg-blue-600/10 px-2 lg:px-4 xl:px-6"
                     >
                       Sign Up
                     </Button>
@@ -83,16 +104,13 @@ const ProfileButton = () => {
               </div>
               <hr className="mt-2" />
               {/* IF NOT-AUTHENTICATED THEN REDIRECT TO LOGIN-PAGE */}
-              <Button className="flex gap-2 justify-start items-center hover:bg-gray-100">
+              <Link
+                href="/wishlist"
+                className="flex gap-2 p-2 justify-start items-center hover:bg-gray-100"
+              >
                 <Heart className="w-4 h-4" />
                 Wishlist
-              </Button>
-
-              {/* IF AUTHENTICATED THEN DISPLAY ELSE HIDE */}
-              <Button className="flex gap-2 justify-start items-center hover:bg-gray-100">
-                <LogOut className="w-4 h-4" />
-                Logout
-              </Button>
+              </Link>
             </div>
           </NavigationMenuContent>
         </NavigationMenuItem>

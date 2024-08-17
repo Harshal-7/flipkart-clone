@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Flipkart Clone
 
-## Getting Started
+This project is an Flipkart clone built using Next.js and Flipkart-API for data fetching. The goal is to create a fully functional e-commerce platform.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Live Link](#live-links)
+- [Installation](#installation)
+- [API Documentation](#api-documentation)
+- [Screenshots](#screenshots-of-pages-from-project)
+- [Contributing](#contributing)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- User authentication and authorization
+- Product listing and search
+- Product details page
+- Add to cart functionality
+- Checkout process
+- Responsive design
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Technologies Used
 
-## Learn More
+- Next.js - React framework for server-side rendering and static site generation
+- Tailwind CSS - Utility-first CSS framework for styling
+- MongoDB - Database for storing user and product data
+- API - Custom APIs for fetching product data, categories, etc.
 
-To learn more about Next.js, take a look at the following resources:
+## Live Links
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### You can view a live demo of the project here.: [Flipkart-Clone](https://flipkart-clone-six-alpha.vercel.app/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Installation
 
-## Deploy on Vercel
+1. Clone the repository:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```sh
+   git clone https://github.com/Harshal-7/flipkart-clone.git
+   cd flipkart-clone
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+2. Install dependencies:
+
+   ```sh
+   npm install
+   ```
+
+3. Start the development server:
+
+   ```sh
+   npm run dev
+   ```
+
+4. Open your browser and go to http://localhost:3000.
+
+5. Environment Variables
+
+   Create a .env file in the root of the project and add your own environment variables. Here is an example of what your .env file should look like:
+
+   ```sh
+   DATABASE_URL="YOUR_MONGO_URL"
+   AUTH_SECRET="YOUR_SECRET_TOKEN"
+   ```
+
+## API Documentation
+
+Full API documentation can be found [Here ](https://documenter.getpostman.com/view/32824294/2sA3rwNuRn).
+
+## Screenshots of pages from project
+
+#### Home-Page
+
+![](</public/screenshots/Screenshot%20(1).png>)
+
+#### Login-Page
+
+![](</public/screenshots/Screenshot%20(2).png>)
+
+#### Register-Page
+
+![](</public/screenshots/Screenshot%20(3).png>)
+
+#### Product-Description-Page
+
+![](</public/screenshots/Screenshot%20(4).png>)
+![](</public/screenshots/Screenshot%20(5).png>)
+
+#### Product-Search-Result-Page
+
+![](</public/screenshots/Screenshot%20(6).png>)
+
+#### Cart-Page
+
+![](</public/screenshots/Screenshot%20(7).png>)
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes. Ensure your code adheres to the project's coding standards and includes relevant tests.

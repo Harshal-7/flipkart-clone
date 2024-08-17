@@ -17,8 +17,9 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { LoginSchema } from "@/schema/LoginSchema";
 import { login } from "@/app/actions/login";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setAuthState } from "@/lib/store/features/authSlice";
+import { setMySession } from "@/lib/store/features/sessionSlice";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ const LoginForm = () => {
   const { toast } = useToast();
 
   const dispatch = useAppDispatch();
+  const session = useAppSelector((state) => state.session.mySession);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -59,6 +61,7 @@ const LoginForm = () => {
 
     // set isAuthenticated-state in redux store to true and redirecting to home-page
     dispatch(setAuthState(true));
+    dispatch(setMySession(session));
     router.push("/");
   };
 

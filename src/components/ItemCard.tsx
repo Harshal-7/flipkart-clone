@@ -11,14 +11,14 @@ const ItemCard = ({ product }: { product: any }) => {
   ).toFixed(0);
 
   return (
-    <div className="flex flex-col gap-2 md:gap-0 group hover:text-blue-600 relative w-[250px] h-full md:w-[280px] overflow-hidden group bg-white hover:shadow-lg transition-all duration-300">
+    <div className="flex flex-col gap-2 md:gap-0 group hover:text-blue-600 relative w-[250px] h-full md:w-[220px] xl:w-[280px] overflow-hidden group bg-white hover:shadow-lg transition-all duration-300">
       {/* Product-Image */}
-      <div className="relative w-[250px] md:w-[280px] h-full max-h-[320px] overflow-hidden group">
+      <div className="relative w-[240px] xl:w-[280px] h-full max-h-[280px] xl:max-h-[340px] self-center overflow-hidden group">
         <Link href={`/productDetails/${product.pid}`}>
           <img
             src={product.images[0]}
             alt="img"
-            className="h-full md:mx-auto object-contain p-6 hover:scale-105 transition-all duration-500"
+            className="h-full mx-auto object-contain p-6 hover:scale-105 transition-all duration-500"
           />
         </Link>
       </div>

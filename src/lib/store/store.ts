@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/authSlice";
 import cartReducer from "./features/cartSlice";
+import sessionReducer from "./features/sessionSlice";
 import cartQuntityReducer from "./features/cartQuantitySlice";
 
 export const makeStore = () => {
@@ -9,6 +10,7 @@ export const makeStore = () => {
       auth: authReducer,
       cartItem: cartReducer,
       cartQuantity: cartQuntityReducer,
+      session: sessionReducer,
     },
   });
 };
