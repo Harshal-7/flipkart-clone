@@ -29,23 +29,11 @@ const ProductSearch = ({ params }: { params: { name: any } }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const options = {
-        method: "GET",
-        url: "https://real-time-flipkart-api.p.rapidapi.com/product-search",
-        params: {
-          q: `${params.name.join("/")}`,
-          page: "1",
-        },
-        headers: {
-          "x-rapidapi-key":
-            "8fd9fec7d6msh253b64b0b38c2abp1ddf82jsn09344b5aaefc",
-          "x-rapidapi-host": "real-time-flipkart-api.p.rapidapi.com",
-        },
-      };
-
       try {
-        const response = await axios.request(options);
-        // console.log("response-data : ", response.data);
+        const response = await axios.get(
+          `https://flipkart-clone-backend-pd3c.onrender.com/api/product/searchProduct/${params.name}`
+        );
+        console.log("response-data : ", response.data);
         setProducts(response.data.products);
         setData(response.data);
       } catch (error) {

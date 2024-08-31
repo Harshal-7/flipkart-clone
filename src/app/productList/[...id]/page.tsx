@@ -24,28 +24,13 @@ const ProductList = ({ params }: { params: { id: any } }) => {
   ];
 
   useEffect(() => {
-    const paramName = params.id.join("/");
-    // console.log("PARAM NAME : ", paramName);
-  }, []);
+    const paramName = params.id.join(",");
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const options = {
-        method: "GET",
-        url: "https://real-time-flipkart-api.p.rapidapi.com/products-by-category",
-        params: {
-          category_id: `${params.id.join("/")}`,
-          page: "1",
-        },
-        headers: {
-          "x-rapidapi-key":
-            "8fd9fec7d6msh253b64b0b38c2abp1ddf82jsn09344b5aaefc",
-          "x-rapidapi-host": "real-time-flipkart-api.p.rapidapi.com",
-        },
-      };
-
+    const fetchProducts = async (paramName: any) => {
       try {
-        const response = await axios.request(options);
+        const response = await axios.get(
+          `https://flipkart-clone-backend-pd3c.onrender.com/api/product/category/${paramName}`
+        );
         console.log("response-data : ", response.data);
         setProducts(response.data.products);
         setData(response.data);
@@ -53,7 +38,7 @@ const ProductList = ({ params }: { params: { id: any } }) => {
         console.error(error);
       }
     };
-    fetchProducts();
+    fetchProducts(paramName);
   }, []);
 
   const handleSorting = async (sortByValue: any, label: any) => {

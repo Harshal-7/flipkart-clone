@@ -17,6 +17,9 @@ import { AppDispatch, RootState } from "@/lib/store/store";
 import { selectAuthState, setAuthState } from "@/lib/store/features/authSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { removeCartItem } from "@/lib/store/features/cartSlice";
+import { db } from "@/lib/db";
+import { getCartItems, removeItemFromCart } from "@/utils/cart";
+import { getSession } from "@/utils/auth";
 
 const CartPage = () => {
   const router = useRouter();
@@ -24,23 +27,18 @@ const CartPage = () => {
   const [totalCost, setTotalCost] = useState(0);
   const [totalMrp, setTotalMrp] = useState(0);
 
-  //redux-state
-  const dispatch = useAppDispatch();
-  const cartItems = useAppSelector((state) => state.cartItem.data);
-
   // get all products from cart-redux-store and add them to state
   useEffect(() => {
-    try {
-      let myData: string | null = window.localStorage.getItem("cartItem");
+    const fetchCartItems = async () => {
+      const res = await getCartItems();
+      console.log("RES CAET  : ", res);
+      setItems(res);
+    };
 
-      if (myData === null || myData === "[]") {
-        myData = JSON.stringify([]); // Convert empty array to a string representation
-      }
-      setItems(JSON.parse(myData));
-    } catch (error) {
-      console.log(error);
-    }
-  }, [cartItems]);
+    fetchCartItems();
+  }, []);
+
+  useEffect(() => {}, []);
 
   // update total cost after adding products to state
   useEffect(() => {
@@ -63,8 +61,11 @@ const CartPage = () => {
     router.push(`/productDetails/${id}`);
   };
 
-  const handleRemoveItemFromCart = (item: any) => {
-    dispatch(removeCartItem(item.itemId));
+  const handleRemoveItemFromCart = async (item: any) => {
+    const deletedProduct = await removeItemFromCart(item.pid);
+    console.log("DELETED P : ", deletedProduct);
+    const cartItems = await getCartItems();
+    setItems(cartItems);
   };
 
   return (
@@ -91,7 +92,7 @@ const CartPage = () => {
                 <div className="flex items-center md:items-start gap-8">
                   <div className="w-20 md:w-32 h-20 md:h-32 relative rounded-md flex-shrink-0">
                     <img
-                      src={item.images[0]}
+                      src={item.image}
                       alt="img"
                       className="w-full h-full object-contain rounded-md"
                     />

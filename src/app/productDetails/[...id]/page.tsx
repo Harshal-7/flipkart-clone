@@ -47,6 +47,8 @@ import { Rating } from "@/components/Rating";
 import { useRouter } from "next/navigation";
 import ProductNotFount from "@/components/ProductNotFount";
 import ProductDescMobile from "@/components/ProductDescMobile";
+import { db } from "@/lib/db";
+import { AddToCart } from "@/utils/cart";
 
 const ProductDetails = ({ params }: { params: { id: any } }) => {
   const [product, setProduct] = useState<any>();
@@ -70,21 +72,10 @@ const ProductDetails = ({ params }: { params: { id: any } }) => {
     const itemId = params.id[0];
 
     const fetchProductDetailsAndCartStatus = async (itemId: any) => {
-      const options = {
-        method: "GET",
-        url: "https://real-time-flipkart-api.p.rapidapi.com/product-details",
-        params: {
-          pid: `${itemId}`,
-        },
-        headers: {
-          "x-rapidapi-key":
-            "8fd9fec7d6msh253b64b0b38c2abp1ddf82jsn09344b5aaefc",
-          "x-rapidapi-host": "real-time-flipkart-api.p.rapidapi.com",
-        },
-      };
-
       try {
-        const response = await axios.request(options);
+        const response = await axios.get(
+          `https://flipkart-clone-backend-pd3c.onrender.com/api/product/productInfo/${itemId}`
+        );
         setProduct(response.data);
         console.log("Product-info : ", response.data);
       } catch (error) {
@@ -98,7 +89,10 @@ const ProductDetails = ({ params }: { params: { id: any } }) => {
   // Add Item To Cart
   const handleAddToCart = async () => {
     console.log("added to cart : ", product);
-    dispatch(setCartItems(product));
+
+    const res = await AddToCart(product);
+    console.log("RES : ", res);
+    // dispatch(setCartItems(product));
     router.push("/cart");
   };
 
