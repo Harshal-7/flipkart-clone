@@ -1,13 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
-import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import ItemCard from "@/components/ItemCard";
-import Loader from "@/components/Loader";
 import { getProductsByCategoryId } from "@/utils/products";
-import ProductNotFount from "@/components/ProductNotFount";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ProductList = ({ params }: { params: { id: any } }) => {
   const [products, setProducts] = useState<any>();
@@ -27,10 +24,23 @@ const ProductList = ({ params }: { params: { id: any } }) => {
     const paramName = params.id.join(",");
 
     const fetchProducts = async (paramName: any) => {
+      console.log("PARAM NAME : ", paramName);
+
+      const options = {
+        method: "GET",
+        params: {
+          category_id: `${paramName}`,
+          page: "1",
+        },
+        url: `${process.env.BASE_URL}/products-by-category`,
+        headers: {
+          "x-rapidapi-key": `${process.env.API_KEY}`,
+          "x-rapidapi-host": `${process.env.HOST}`,
+        },
+      };
+
       try {
-        const response = await axios.get(
-          `https://flipkart-clone-backend-pd3c.onrender.com/api/product/category/${paramName}`
-        );
+        const response = await axios.request(options);
         console.log("response-data : ", response.data);
         setProducts(response.data.products);
         setData(response.data);
@@ -52,7 +62,16 @@ const ProductList = ({ params }: { params: { id: any } }) => {
   };
 
   if (!products) {
-    return <Loader />;
+    return (
+      <>
+        <div className="w-full max-w-screen-2xl mx-auto md:mt-5 ">
+          <Skeleton className="w-full p-4 py-14" />
+        </div>
+        <div className="w-full max-w-screen-2xl mx-auto flex justify-center items-center mt-2 ">
+          <Skeleton className="w-full h-[700px]" />
+        </div>
+      </>
+    );
   }
 
   return (
@@ -99,14 +118,7 @@ const ProductList = ({ params }: { params: { id: any } }) => {
         <div className="text-start w-1/2">
           page {page} of {data.totalPages}{" "}
         </div>
-        <div className=" flex gap-2 flex-grow">
-          <p>1</p>
-          <p>2</p>
-          <p>3</p>
-          <p>4</p>
-          <p>5</p>
-          <p>6</p>
-        </div>
+        {/* TODO : PAGES API IMPLEMENTATION  */}
       </div>
     </div>
   );

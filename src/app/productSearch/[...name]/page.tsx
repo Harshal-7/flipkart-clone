@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from "react";
 
 import axios from "axios";
-import Loader from "@/components/Loader";
 import ItemCard from "@/components/ItemCard";
 import { getProductsByCategoryName } from "@/utils/products";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const sortBy = [
   { relevance: "Relevance" },
@@ -29,10 +29,21 @@ const ProductSearch = ({ params }: { params: { name: any } }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      const options = {
+        method: "GET",
+        params: {
+          q: `${params.name}`,
+          page: "1",
+        },
+        url: `${process.env.BASE_URL}/product-search`,
+        headers: {
+          "x-rapidapi-key": `${process.env.API_KEY}`,
+          "x-rapidapi-host": `${process.env.HOST}`,
+        },
+      };
+
       try {
-        const response = await axios.get(
-          `https://flipkart-clone-backend-pd3c.onrender.com/api/product/searchProduct/${params.name}`
-        );
+        const response = await axios.request(options);
         console.log("response-data : ", response.data);
         setProducts(response.data.products);
         setData(response.data);
@@ -58,7 +69,16 @@ const ProductSearch = ({ params }: { params: { name: any } }) => {
   };
 
   if (!products || !data) {
-    <Loader />;
+    return (
+      <>
+        <div className="w-full max-w-screen-2xl mx-auto md:mt-5 ">
+          <Skeleton className="w-full p-4 py-14" />
+        </div>
+        <div className="w-full max-w-screen-2xl mx-auto flex justify-center items-center mt-2 ">
+          <Skeleton className="w-full h-[700px]" />
+        </div>
+      </>
+    );
   }
 
   return (
@@ -105,14 +125,7 @@ const ProductSearch = ({ params }: { params: { name: any } }) => {
         <div className="text-start w-1/2">
           page {page} of {data?.totalPages}{" "}
         </div>
-        <div className=" flex gap-2 flex-grow">
-          <p>1</p>
-          <p>2</p>
-          <p>3</p>
-          <p>4</p>
-          <p>5</p>
-          <p>6</p>
-        </div>
+        {/* TODO : PAGES API IMPLEMENTATION  */}
       </div>
     </div>
   );

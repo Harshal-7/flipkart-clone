@@ -1,7 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-
 const RatingBar = ({ rating, totalRating, star }: any) => {
   const percentage = (rating / totalRating) * 100;
 

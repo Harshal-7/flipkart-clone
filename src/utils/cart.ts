@@ -8,6 +8,10 @@ export const AddToCart = async (product: any) => {
   const session = await getSession();
   const email = session?.user?.email || "";
 
+  if (!session?.user?.email) {
+    return;
+  }
+
   const user = await db.user.findUnique({
     where: {
       email: email,

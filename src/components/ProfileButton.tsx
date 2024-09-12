@@ -19,10 +19,6 @@ import { RootState } from "@/lib/store/store";
 import { setAuthState } from "@/lib/store/features/authSlice";
 import { getSession, signout } from "@/utils/auth";
 import Link from "next/link";
-import {
-  removeMySession,
-  setMySession,
-} from "@/lib/store/features/sessionSlice";
 
 const ProfileButton = () => {
   // dispatch: used to set-auth-state in redux store so we can access the authentication state everywhere
@@ -33,7 +29,6 @@ const ProfileButton = () => {
   );
 
   // get user session from redux-state
-  const session = useAppSelector((state) => state.session.mySession);
   // set username from session.name
   const [userName, setUserName] = useState<any>();
 
@@ -43,22 +38,15 @@ const ProfileButton = () => {
       const session = await getSession();
       if (session?.user) {
         dispatch(setAuthState(true));
-        dispatch(setMySession(session));
         setUserName(session.user.name);
       }
     };
     fetchSession();
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    console.log("session : ", session);
-    console.log("name : ", userName);
-  }, [session]);
-
   // signing out user and setting isAuthenticated state to false;
   const handleSignOut = async () => {
     dispatch(setAuthState(false));
-    dispatch(removeMySession());
     await signout();
   };
 
@@ -70,9 +58,11 @@ const ProfileButton = () => {
         <NavigationMenuItem>
           <NavigationMenuTrigger className="flex gap-1 lg:gap-2 items-center p-0 lg:p-2 rounded-lg bg-myBlue text-white font-semibold border-0 z-[99]">
             <UserCircle2 className="w-6 h-6" />
-            <p className="hidden sm:inline-flex lg:text-base">
-              {userName ? userName : "User"}
-            </p>
+            {isAuthenticated ? (
+              <p className="hidden sm:inline-flex lg:text-base">{userName}</p>
+            ) : (
+              <p className="hidden sm:inline-flex lg:text-base">User</p>
+            )}
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <div className="flex flex-col gap-2 p-4">

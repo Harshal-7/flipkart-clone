@@ -1,10 +1,6 @@
 "use client";
 
 import HomeProducts from "@/components/HomeProducts";
-import ItemCard from "@/components/ItemCard";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function Home() {
   return (

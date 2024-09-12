@@ -1,10 +1,9 @@
 "use client";
 
 import { ShoppingCart } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/lib/store/hooks";
 
 const CartButton = () => {
   const router = useRouter();

@@ -1,21 +1,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import {
-  ChevronDown,
-  Search,
-  ShoppingCart,
-  User2,
-  UserCircle2,
-} from "lucide-react";
-import { Noto_Sans, Poppins } from "next/font/google";
-import Image from "next/image";
+
+import { Noto_Sans } from "next/font/google";
 import React, { useEffect, useState } from "react";
-import { Input } from "./ui/input";
 import ProfileButton from "./ProfileButton";
 import CartButton from "./CartButton";
 import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
 import SearchBar, { SearchBarMobileScreen } from "./SearchBar";
 import axios from "axios";
 import CategoryTree from "./CategoryTree";

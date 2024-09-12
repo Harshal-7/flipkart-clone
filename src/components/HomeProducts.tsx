@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import ItemCard from "./ItemCard";
+import { Skeleton } from "./ui/skeleton";
 
 const shuffleArray = (array: Array<object>) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -34,7 +35,16 @@ const HomeProducts = () => {
   }, []);
 
   if (!homeTopbarProducts && !homeProducts) {
-    return <div></div>;
+    return (
+      <>
+        <div className="w-full h-28 lg:h-36 xl:max-w-screen-2xl flex lg:justify-center items-center overflow-auto lg:gap-4 mt-4">
+          <Skeleton className="w-full h-28" />
+        </div>
+        <div className="w-full max-w-screen-2xl flex gap-x-4 justify-center mt-2 ">
+          <Skeleton className="w-full h-[600px]" />
+        </div>
+      </>
+    );
   }
 
   return (

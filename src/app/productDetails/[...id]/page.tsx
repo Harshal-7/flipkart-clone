@@ -1,54 +1,24 @@
 "use client";
 
 import axios from "axios";
-import React, { Suspense, useEffect, useState } from "react";
-
-import { Button } from "@/components/ui/button";
-import {
-  ChevronsUpDown,
-  Heart,
-  Lock,
-  Minus,
-  Plus,
-  Share2,
-  ShoppingCart,
-  Tag,
-  ThumbsDown,
-  ThumbsUp,
-  Zap,
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useEffect, useState } from "react";
+import { ShoppingCart, Tag, ThumbsDown, ThumbsUp, Zap } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { setCartItems } from "@/lib/store/features/cartSlice";
 import { Rating } from "@/components/Rating";
 import { useRouter } from "next/navigation";
 import ProductNotFount from "@/components/ProductNotFount";
 import ProductDescMobile from "@/components/ProductDescMobile";
-import { db } from "@/lib/db";
 import { AddToCart } from "@/utils/cart";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ProductDetails = ({ params }: { params: { id: any } }) => {
   const [product, setProduct] = useState<any>();
@@ -57,47 +27,76 @@ const ProductDetails = ({ params }: { params: { id: any } }) => {
 
   const router = useRouter();
 
-  //redux-state
-  const dispatch = useAppDispatch();
-
   const discount = (
     ((product?.mrp - product?.price) / product?.mrp) *
     100
   ).toFixed(0);
 
-  const { toast } = useToast();
-
   useEffect(() => {
-    // API call to fetch product details
-    const itemId = params.id[0];
+    const itemId = params.id;
 
-    const fetchProductDetailsAndCartStatus = async (itemId: any) => {
+    const fetchProductDetails = async (itemId: any) => {
+      const options = {
+        method: "GET",
+        params: {
+          pid: `${itemId}`,
+        },
+        url: `${process.env.BASE_URL}/product-details`,
+        headers: {
+          "x-rapidapi-key": `${process.env.API_KEY}`,
+          "x-rapidapi-host": `${process.env.HOST}`,
+        },
+      };
+
       try {
-        const response = await axios.get(
-          `https://flipkart-clone-backend-pd3c.onrender.com/api/product/productInfo/${itemId}`
-        );
+        const response = await axios.request(options);
         setProduct(response.data);
-        console.log("Product-info : ", response.data);
+        // console.log("Product-info : ", response.data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchProductDetailsAndCartStatus(itemId);
+    fetchProductDetails(itemId);
   }, [params.id]);
 
   // Add Item To Cart
-  const handleAddToCart = async () => {
-    console.log("added to cart : ", product);
-
+  const handleAddToCart = async (product: any) => {
     const res = await AddToCart(product);
-    console.log("RES : ", res);
-    // dispatch(setCartItems(product));
+    if (res) {
+      console.log("RES : ", res);
+    }
     router.push("/cart");
   };
 
   if (!product) {
-    return <div>...</div>;
+    return (
+      <div className="w-full max-w-screen-xl min-h-screen hidden md:flex mx-auto bg-white relative">
+        {/* Product image  */}
+        <div className="w-[40%] hidden md:flex mt-5 h-fit sticky top-5">
+          {/* PRODUCT IMG, ADD TO CART & BUY NOW  */}
+
+          <Skeleton className="h-[420px] w-[240px] rounded-none mt-5 ml-5" />
+
+          <div className="w-full h-fit flex flex-col gap-10 justify-center items-start px-8 overflow-hidden mt-4">
+            <Skeleton className="h-[420px] w-[340px] rounded-none" />
+
+            <div className="flex gap-4 w-full">
+              <Skeleton className="font-bold w-full flex items-center justify-center px-3 py-4 gap-2">
+                <Skeleton className="py-4" />
+              </Skeleton>
+              <Skeleton className="font-bold w-full flex items-center justify-center px-3 py-4 gap-2 ">
+                <Skeleton className="py-4" />
+              </Skeleton>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-[60%] hidden md:flex flex-col gap-2 p-10">
+          <Skeleton className="h-full w-full rounded-none " />
+        </div>
+      </div>
+    );
   }
 
   if (product.error) {
@@ -118,7 +117,7 @@ const ProductDetails = ({ params }: { params: { id: any } }) => {
             orientation="vertical"
           >
             <CarouselContent>
-              {product?.images.map((item: any, index: number) => (
+              {product?.images?.map((item: any, index: number) => (
                 <CarouselItem key={index}>
                   <div
                     onClick={() => setImgId(index)}
@@ -144,7 +143,7 @@ const ProductDetails = ({ params }: { params: { id: any } }) => {
             />
             <div className="flex gap-4 w-full">
               <button
-                onClick={handleAddToCart}
+                onClick={() => handleAddToCart(product)}
                 className="font-bold w-full flex items-center justify-center px-3 py-4 gap-2 bg-[#ff9f00] text-white hover:bg-[#ff9f00]/90"
               >
                 <ShoppingCart fill="white" className="w-6 h-6" />

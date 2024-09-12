@@ -1,25 +1,11 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { InfoIcon, ShoppingCart, Trash } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/lib/store/store";
-import { selectAuthState, setAuthState } from "@/lib/store/features/authSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { removeCartItem } from "@/lib/store/features/cartSlice";
-import { db } from "@/lib/db";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { InfoIcon } from "lucide-react";
 import { getCartItems, removeItemFromCart } from "@/utils/cart";
-import { getSession } from "@/utils/auth";
 
 const CartPage = () => {
   const router = useRouter();
